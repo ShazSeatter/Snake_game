@@ -13,7 +13,7 @@ public class App {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //program to terminate when 'x' button is clicked
 
-        // creating new instance of snakegame
+        // creating new instance of snakeGame
         SnakeGame snakeGame = new SnakeGame(boardWidth, boardHeight);
         frame.add(snakeGame);
         frame.pack(); // places panel inside frame with full dimensions inside panel
