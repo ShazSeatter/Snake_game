@@ -17,5 +17,6 @@ public class App {
         SnakeGame snakeGame = new SnakeGame(boardWidth, boardHeight);
         frame.add(snakeGame);
         frame.pack(); // places panel inside frame with full dimensions inside panel
+        snakeGame.requestFocus(); // snake game listening for key presses
     }
 }

@@ -5,7 +5,9 @@ import java.util.Random; // getting random x,y values on screen
 import javax.swing.*;
 
 // inheriting properties from JPanel
-public class SnakeGame extends JPanel implements ActionListener {
+public class SnakeGame extends JPanel implements ActionListener, KeyListener {
+
+
 
 
     // private so that only SnakeGame class has access to it
@@ -29,11 +31,14 @@ public class SnakeGame extends JPanel implements ActionListener {
 
     // Food
     Tile food;
+    Random random;
 
     // game logic
     Timer gameLoop;
+    int velocityX;
+    int velocityY;
 
-    Random random;
+
 
     // creating new constructor
     SnakeGame(int boardWidth, int boardHeight) {
@@ -42,10 +47,17 @@ public class SnakeGame extends JPanel implements ActionListener {
         this.boardHeight = boardHeight;
         setPreferredSize(new Dimension(this.boardWidth, this.boardHeight));
         setBackground(Color.black);
+        addKeyListener(this);
+        setFocusable(true); // snake game is listening
+
+
         snakeHead = new Tile(5, 5);
         food = new Tile(10, 10);
         random = new Random();
         placeFood();
+
+        velocityX = 0;
+        velocityY = 0;
 
         gameLoop = new Timer(100, this);
         gameLoop.start();
@@ -71,7 +83,7 @@ public class SnakeGame extends JPanel implements ActionListener {
         g.setColor(Color.red);
         g.fillRect(food.x * tileSize, food.y * tileSize, tileSize, tileSize);
 
-        // snake
+        // Snake
         g.setColor(Color.green);
         // draw rectangle - needing to multiply by tileSize to move it 125px to right and 125px down
         g.fillRect(snakeHead.x * tileSize, snakeHead.y * tileSize, tileSize, tileSize );
@@ -83,9 +95,44 @@ public class SnakeGame extends JPanel implements ActionListener {
         food.y = random.nextInt(boardHeight/tileSize);
     }
 
+    public void move() {
+        //Snake head
+        snakeHead.x += velocityX;
+        snakeHead.y += velocityY;
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
-        // every 100 miliseconds we are going to call this actionPerformed, which will call repaint - which basically calls draw over and over
+        move(); // update x and y position of the snake
+        // every 100 milliseconds we are going to call this actionPerformed, which will call repaint - which basically calls draw over and over
         repaint();
+    }
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP && velocityY != 1) {
+            velocityX = 0;
+            velocityY = -1;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_DOWN && velocityY != -1){
+            velocityX = 0;
+            velocityY = 1;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_LEFT && velocityX != 1) {
+            velocityX = -1;
+            velocityY = 0;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_RIGHT && velocityX != -1) {
+            velocityX = 1;
+            velocityY = 0;
+        }
+    }
+
+    // do not need
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }
